@@ -14,17 +14,7 @@ int main() {
     char input[3];
     fgets(input, 3 , stdin);
     printf("%c\n",input[0]);
-    if (input[0]=='n') {
-        printf("creating semaphore\n");
-        create();
-        print_err();
-    }
-    if (input[0]=='y') {
-        printf("removing semaphore\n");
-        rem();
-        print_err();
-    }
-    return 0;
+    parse_args(input);
 }
 int write(char * line) {
     return 0;
