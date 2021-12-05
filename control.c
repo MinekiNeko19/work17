@@ -19,15 +19,19 @@ int parse_args(char * line) {
 }
 
 int create() {
+    // semaphore
     semid = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
     if (semid == -1) {
         semid = semget(KEY,0,0);
     }
+    // shared memory
     shmid = shmget(KEY,sizeof(100), IPC_CREAT | IPC_EXCL | 0644);
     if (shmid == -1) {
         shmid = shmget(KEY,0,0);
     }
-    return 0;
+    // file
+    file = open("transcript", O_CREAT | O_TRUNC, 0644);
+    return errno;
 }
 
 int rem() {
@@ -37,7 +41,7 @@ int rem() {
     shmid = shmget(KEY,0,0);
     shmctl(shmid,IPC_RMID,0);
 
-    return 0;
+    return errno;
 }
 
 void print_err() {
