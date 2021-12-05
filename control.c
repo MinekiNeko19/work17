@@ -1,15 +1,17 @@
 #include "control.h"
 
 int semid;
+int shmid;
+int file;
 
 int parse_args(char * line) {
     if (line[0]=='n') {
-        printf("creating semaphore\n");
+        // printf("creating semaphore\n");
         create();
         print_err();
     }
     if (line[0]=='y') {
-        printf("removing semaphore\n");
+        // printf("removing semaphore\n");
         rem();
         print_err();
     }
@@ -18,13 +20,24 @@ int parse_args(char * line) {
 
 int create() {
     semid = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
-    return semid;
+    if (semid == -1) {
+        semid = semget(KEY,0,0);
+    }
+    shmid = shmget(KEY,sizeof(100), IPC_CREAT | IPC_EXCL | 0644);
+    if (shmid == -1) {
+        shmid = shmget(KEY,0,0);
+    }
+    return 0;
 }
 
 int rem() {
     semid = semget(KEY,0,0);
     semctl(semid,IPC_RMID,0);
-    return semid;
+
+    shmid = shmget(KEY,0,0);
+    shmctl(shmid,IPC_RMID,0);
+
+    return 0;
 }
 
 void print_err() {
