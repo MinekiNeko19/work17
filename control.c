@@ -25,13 +25,15 @@ void create() {
     printf("Semaphore value: %d\n", r);
 
     // shared memory
-    int shmd = shmget(SHMKEY, sizeof(int), IPC_CREAT | IPC_EXCL | 0640);
+    int shmd = shmget(SHMKEY, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
     if (shmd == -1) {
         printf("error %d: %s\n", errno, strerror(errno));
         shmd = shmget(SHMKEY, 0, 0);
     }
     int * data = shmat(shmd,0,0);
     *data = 10;
+    printf("shmd: %d\tdata: %d\n",shmd, *data);
+    // shmdt(data);
 
     // file
     int file = open("transcript", O_CREAT | O_EXCL, 0644);
@@ -59,7 +61,9 @@ void rem() {
 
     int file = open("transcript", O_RDONLY);
     char txt[500];
-    read(file,txt,500);
+    struct stat sb;
+    stat("transcript", &sb);
+    read(file,txt,sb.st_size);
     printf("%s",txt);
 }
 
