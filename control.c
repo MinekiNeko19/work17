@@ -3,11 +3,11 @@
 int parse_args(char * line) {
     if (line[0] == 'n') {
         create();
-        print_err();
+        // print_err();
     }
     if (line[0]=='y') {
         rem();
-        print_err();
+        // print_err();
     }
     return errno;
 }
@@ -60,11 +60,11 @@ void rem() {
     shmctl(shmd,IPC_RMID,0);
 
     int file = open("transcript", O_RDONLY);
-    char txt[500];
     struct stat sb;
     stat("transcript", &sb);
+    char txt[sb.st_size];
     read(file,txt,sb.st_size-1);
-    printf("%s",txt);
+    printf("%s\n",txt);
 }
 
 void print_err() {
