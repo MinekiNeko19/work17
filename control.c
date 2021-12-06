@@ -1,11 +1,11 @@
 #include "control.h"
 
 int parse_args(char * line) {
-    if (line[0] == 'n') {
+    if (line[0] == 'c') {
         create();
         // print_err();
     }
-    if (line[0]=='y') {
+    if (line[0]=='r') {
         rem();
         // print_err();
     }
@@ -16,7 +16,7 @@ void create() {
     // semaphone
     int semd = semget(SEMKEY, 1, IPC_CREAT | IPC_EXCL | 0644);
     if (semd == -1) {
-        printf("error %d: %s\n", errno, strerror(errno));
+        // printf("error %d: %s\n", errno, strerror(errno));
         semd = semget(SEMKEY, 1, 0);
     }
     union semun us;
@@ -27,18 +27,18 @@ void create() {
     // shared memory
     int shmd = shmget(SHMKEY, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
     if (shmd == -1) {
-        printf("error %d: %s\n", errno, strerror(errno));
+        // printf("error %d: %s\n", errno, strerror(errno));
         shmd = shmget(SHMKEY, 0, 0);
     }
-    int * data = shmat(shmd,0,0);
-    *data = 10;
-    printf("shmd: %d\tdata: %d\n",shmd, *data);
+    // int * data = shmat(shmd,0,0);
+    // *data = 0;
+    // printf("shmd: %d\tdata: %d\n",shmd, *data);
     // shmdt(data);
 
     // file
-    int file = open("transcript", O_CREAT | O_EXCL, 0644);
+    int file = open("transcript", O_CREAT | O_EXCL | O_TRUNC, 0644);
     if (file == -1) {
-        printf("error %d: %s\n", errno, strerror(errno));
+        // printf("error %d: %s\n", errno, strerror(errno));
         file = open("transcript", O_RDWR);
     }
     close(file);
@@ -47,14 +47,14 @@ void create() {
 void rem() {
     int semd = semget(SEMKEY,0,0);
     if (semd == -1) {
-        printf("error %d: %s\n", errno, strerror(errno));
+        // printf("error %d: %s\n", errno, strerror(errno));
         semd = semget(SEMKEY, 1, 0);
     }
     semctl(semd,IPC_RMID,0);
 
     int shmd = shmget(SHMKEY,0,0);
     if (shmd == -1) {
-        printf("error %d: %s\n", errno, strerror(errno));
+        // printf("error %d: %s\n", errno, strerror(errno));
         shmd = shmget(SHMKEY, 1, 0);
     }
     shmctl(shmd,IPC_RMID,0);
@@ -69,4 +69,9 @@ void rem() {
 
 void print_err() {
    
+}
+
+int main(int argc, char *argv[]) {
+    parse_args(argv[1]);
+    return 0;
 }
