@@ -1,8 +1,6 @@
 #include "write.h"
 
 int main() {
-  create();
-
   // access semaphore
   int semd = semget(SEMKEY,0,0);
   struct sembuf sb;
@@ -24,9 +22,9 @@ int main() {
   struct stat s;
   stat("transcript", &s);
   char txt[s.st_size];
-  read(file,txt,s.st_size-1);
+  read(file,txt,s.st_size-2);
   txt[s.st_size] = '\n';
-  printf("%s\n", txt);
+  // printf("%s\n", txt);
 
   char line[100];
   int j = s.st_size-1 - *d;
@@ -45,10 +43,13 @@ int main() {
   input[100] = '\n';
   printf("%s\n",input);
 
+
   // write input into transcript
+  *d = 0;
   int i = 0;
   while(input[i]) {
     write(file,input+i,1);
+    (*d)++;
     i++;
   }
 
@@ -62,10 +63,10 @@ int main() {
   // closing file
   close(file);
   
-  printf("Finished with the story? (y/n)\n");
-  char temp[3];
-  fgets(temp,3,stdin);
-  parse_args(temp);
+  // printf("Finished with the story? (y/n)\n");
+  // char temp[3];
+  // fgets(temp,3,stdin);
+  // parse_args(temp);
 
   return 0;
 }
