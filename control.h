@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <fcntl.h>
 
-#define KEY 24602
+#define SEMKEY 24602
+#define SHMKEY 24603
 
 union semun {
   int val;                  //used for SETVAL
