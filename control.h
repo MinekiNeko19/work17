@@ -12,7 +12,20 @@
 
 #define KEY 24602
 
+union semun {
+  int val;                  //used for SETVAL
+  struct semid_ds *buf;     //used for IPC_STAT and IPC_SET
+  unsigned short  *array;   //used for SETALL
+  struct seminfo  *__buf;
+};
+
+// struct sembuf {
+//   short sem_op;
+//   short sem_num;
+//   short sem_flag;
+// };
+
 int parse_args(char * line);
-int create();
-int rem();
+void create();
+void rem();
 void print_err();
