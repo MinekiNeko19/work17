@@ -31,3 +31,4 @@ int parse_args(char * line);
 void create();
 void rem();
 void print_err();
+int main();
