@@ -63,7 +63,7 @@ void rem() {
     char txt[500];
     struct stat sb;
     stat("transcript", &sb);
-    read(file,txt,sb.st_size);
+    read(file,txt,sb.st_size-1);
     printf("%s",txt);
 }
 
