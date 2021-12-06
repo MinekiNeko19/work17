@@ -1,38 +1,24 @@
 #include "write.h"
 
-union semun {
-  int val;                  //used for SETVAL
-  struct semid_ds *buf;     //used for IPC_STAT and IPC_SET
-  unsigned short  *array;   //used for SETALL
-  struct seminfo  *__buf;
-};
-
 int main() {
-    // access resources in semaphone
-    parse_args("n");
-    int semid = semget(KEY,0,0);
-    int shmid = shmget(KEY,0,0);
-    int file = open("transcript", O_RDONLY | O_WRONLY | O_APPEND);
-    write(file,"help\n", 5);
+  char temp[3];
+  fgets(temp,3,stdin);
+  parse_args("c");
 
-    printf("semid: %d\tshmid: %d\n", semid,shmid);
-    // parse_args("y");
-    // close(file);  
+  // access semaphore
+  int semd = semget(KEY,0,0);
+  struct sembuf sb;
+  sb.sem_num = 0;
+  sb.sem_flg = SEM_UNDO;
+  sb.sem_op = -1; //setting the operation to down
 
-    // display last line added to file
+  semop(semd, &sb, 1); //perform the operation
 
-    // prompt for next line
 
-    // write to file and shared mem
+  // closing the semaphores
+  sb.sem_op = 1; //set the operation to up
+  semop(semd, &sb, 1); //perform the operation
+  parse_args("r");
 
-    // temporary test code
-    // char input[100];
-    // fgets(input, 3 , stdin);
-    // printf("%c\n",input[0]);
-    // parse_args(input);
-
-    
-}
-int writing(char * line) {
-    return 0;
+  return 0;
 }
