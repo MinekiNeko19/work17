@@ -13,22 +13,39 @@ int main() {
   semop(semd, &sb, 1); //perform the operation
 
   // access shared memory
-  // int * d;
-  // *d = 0;
   int shmd = shmget(SHMKEY,0,0);
   int * d = shmat(shmd,0,0);
   printf("shmd data: %d\n",*d);
 
   // access transcript
-  int file = open("transcript", O_WRONLY | O_APPEND);
+  int file = open("transcript", O_RDWR | O_APPEND);
+
+  // read last line of transcript
+  struct stat s;
+  stat("transcript", &s);
+  char txt[s.st_size];
+  read(file,txt,s.st_size-1);
+  txt[s.st_size] = '\n';
+  printf("%s\n", txt);
+
   char line[100];
-  read(file,line,100);
+  int j = s.st_size-1 - *d;
+  int x = 0;
+  while (txt[j]) {
+    line[x] = txt[j];
+    x++;
+    j++;
+  }
   printf("Last Line: %s\n",line);
+
+  // input
   char input[100];
   printf("Enter Next Line: ");
   fgets(input,99,stdin);
   input[100] = '\n';
   printf("%s\n",input);
+
+  // write input into transcript
   int i = 0;
   while(input[i]) {
     write(file,input+i,1);
