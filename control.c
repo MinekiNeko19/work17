@@ -1,52 +1,42 @@
 #include "control.h"
 
-int semid;
-int shmid;
-int file;
-
 int parse_args(char * line) {
-    if (line[0]=='n') {
-        // printf("creating semaphore\n");
+    if (line[0] == 'c') {
         create();
         print_err();
     }
-    if (line[0]=='y') {
-        // printf("removing semaphore\n");
+    if (line[0]=='r') {
         rem();
         print_err();
     }
     return errno;
 }
 
-int create() {
-    // semaphore
-    semid = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
-    if (semid == -1) {
-        semid = semget(KEY,0,0);
+void create() {
+    // semaphone
+    int semd = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
+    if (semd == -1) {
+        printf("error %d: %s\n", errno, strerror(errno));
+        semd = semget(KEY, 1, 0);
     }
+    union semun us;
+    us.val = 1;
+    int r = semctl(semd, 0, SETVAL, us);
+    printf("Semaphore value: %d\n", r);
+
     // shared memory
-    shmid = shmget(KEY,sizeof(100), IPC_CREAT | IPC_EXCL | 0644);
-    if (shmid == -1) {
-        shmid = shmget(KEY,0,0);
-    }
     // file
-    file = open("transcript", O_CREAT | O_TRUNC, 0644);
-    return errno;
 }
 
-int rem() {
-    semid = semget(KEY,0,0);
-    semctl(semid,IPC_RMID,0);
-
-    shmid = shmget(KEY,0,0);
-    shmctl(shmid,IPC_RMID,0);
-
-    return errno;
+void rem() {
+    int semd = semget(KEY,0,0);
+    if (semd == -1) {
+        printf("error %d: %s\n", errno, strerror(errno));
+        semd = semget(KEY, 1, 0);
+    }
+    semctl(semd,IPC_RMID,0);
 }
 
 void print_err() {
-    if (errno) {
-        printf("error %d: %s\n", errno, strerror(errno));
-    }
-    errno = 0;
+   
 }
