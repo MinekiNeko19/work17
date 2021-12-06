@@ -31,13 +31,13 @@ void create() {
         shmd = shmget(SHMKEY, 0, 0);
     }
     int * data = shmat(shmd,0,0);
-    *data = 100;
+    *data = 10;
 
     // file
     int file = open("transcript", O_CREAT | O_EXCL, 0644);
     if (file == -1) {
         printf("error %d: %s\n", errno, strerror(errno));
-        file = open("transcript", O_TRUNC);
+        file = open("transcript", O_RDWR);
     }
     close(file);
 }
