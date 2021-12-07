@@ -22,14 +22,15 @@ int main() {
   struct stat s;
   stat("transcript", &s);
   char txt[s.st_size];
-  read(file,txt,s.st_size-2);
-  txt[s.st_size] = '\n';
+  read(file,txt,s.st_size);
+  // txt[s.st_size] = '\n';
   // printf("%s\n", txt);
 
-  char line[100];
-  int j = s.st_size-1 - *d;
+  char line[s.st_size];
+  int j = s.st_size - *d;
+  printf("starting here (j): %d\n", j);
   int x = 0;
-  while (txt[j]) {
+  while (x!=*d) {
     line[x] = txt[j];
     x++;
     j++;
@@ -62,11 +63,5 @@ int main() {
 
   // closing file
   close(file);
-  
-  // printf("Finished with the story? (y/n)\n");
-  // char temp[3];
-  // fgets(temp,3,stdin);
-  // parse_args(temp);
-
   return 0;
 }
