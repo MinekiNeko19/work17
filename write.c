@@ -13,7 +13,7 @@ int main() {
   // access shared memory
   int shmd = shmget(SHMKEY,0,0);
   int * d = shmat(shmd,0,0);
-  printf("shmd data: %d\n",*d);
+  // printf("shmd data: %d\n",*d);
 
   // access transcript
   int file = open("transcript", O_RDWR | O_APPEND);
@@ -28,9 +28,9 @@ int main() {
 
   char line[s.st_size];
   int j = s.st_size - *d;
-  printf("starting here (j): %d\n", j);
+  // printf("starting here (j): %d\n", j);
   int x = 0;
-  while (x!=*d) {
+  while (x != *d) {
     line[x] = txt[j];
     x++;
     j++;
@@ -42,7 +42,7 @@ int main() {
   printf("Enter Next Line: ");
   fgets(input,99,stdin);
   input[100] = '\n';
-  printf("%s\n",input);
+  // printf("%s\n",input);
 
 
   // write input into transcript
