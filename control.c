@@ -55,8 +55,15 @@ void rem() {
     struct stat sb;
     stat("transcript", &sb);
     char txt[sb.st_size];
+    // printf("size of transcript: %ld\n", sb.st_size);
     read(file,txt,sb.st_size);
-    printf("%s\n",txt);
+    int i = 0;
+    while (i < sb.st_size) {
+        // printf("txt[%i]: %c\n",i,txt[i]);
+        printf("%c",txt[i]);
+        i++;
+    }
+    // printf("Compared to:\n%s\n",txt);
 }
 
 void print_err() {
