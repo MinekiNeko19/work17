@@ -26,17 +26,23 @@ int main() {
   // txt[s.st_size] = '\n';
   // printf("%s\n", txt);
 
-  char line[*d];
+  // char line[*d];
   int j = s.st_size - *d;
-  printf("starting here (j): %d for %d bytes\n", j, *d);
+  // printf("starting here (j): %d for %d bytes\n", j, *d);
+  printf("data stored: %d\n",*d);
   int x = 0;
+  printf("Last Line: ");
   while (x != *d) {
-    line[x] = txt[j];
-    printf("txt[%d]: %c\n",j,txt[j]);
+    // line[x] = txt[j];
+    printf("%c",txt[j]);
+    // printf("txt[%d]: %c\n",j,txt[j]);
+    // printf("line[%d]: %c\n",x,line[x]);
     x++;
     j++;
   }
-  printf("Last Line: %s\n",line);
+  printf("\n");
+
+
 
   // input
   char input[100];
