@@ -26,12 +26,13 @@ int main() {
   // txt[s.st_size] = '\n';
   // printf("%s\n", txt);
 
-  char line[s.st_size];
+  char line[*d];
   int j = s.st_size - *d;
-  // printf("starting here (j): %d\n", j);
+  printf("starting here (j): %d for %d bytes\n", j, *d);
   int x = 0;
   while (x != *d) {
     line[x] = txt[j];
+    printf("txt[%d]: %c\n",j,txt[j]);
     x++;
     j++;
   }
